@@ -1,66 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jspdf</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <title>TTS 2021</title>
+    <style>
+        #tts * {
+            font-family: sans-serif;
+        }
+
+        #tts .methods {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        #tts .methods .post,
+        #tts .methods .get {
+            margin: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 0;
+            margin: 5px 20px;
+        }
+
+        #tts .methods .get .btns,
+        #tts .methods .post .btns {
+            margin: 5px 0;
+        }
+
+        #tts .methods .get #text_get,
+        #tts .methods .post #text_post {
+            width: 150px;
+        }
+
+        #tts .methods .get .btns,
+        #tts .methods .post .btns {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #tts .methods .post #write_post {
+            width: 70px;
+            margin: 5px 0;
+        }
+
+        #tts #res {
+            display: none;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="tts">
+        <div class="methods">
+            <div class="get">
+                <h2>GET</h2>
+                <button id="read_get" type="button">Прочитать</button>
+            </div>
 
-    <h2>Пользователей онлайн: <span id="online-user">1</span></h2>
-    <div id="root"></div>
-    <button id="post" type="button">POST</button>
-    <button id="get" type="button">GET</button>
+            <div class="post">
+                <h2>POST</h2>
+                <input type="text" name="text_post" id="text_post" value="">
+                <button id="write_post" type="button">Записать</button>
+
+            </div>
+        </div>
+
+        <div id="res">
+            <h2>Результат:</h2>
+            <div id="root">123</div>
+        </div>
+    </div>
 
     <script>
         window.onload = () => {
 
-            document.getElementById("post").addEventListener("click", async e => {
-                document.getElementById("post").disabled = true;
+            // GET
+            document.getElementById("read_get").addEventListener("click", async e => {
+                document.getElementById("read_get").disabled = true;
 
-                // const client = await (await fetch('http://ip-api.com/json')).json(); // const payload = JSON.stringify({ "_id": 555, "aa": 1222, ip: client.query });
+                const fetchResponse1 = await fetch("https://script.google.com/macros/s/AKfycbxEH1dGuS73gJF8IjvVy-J5FcDAVRzOwrzI3tS__uvBRHDeNfJAGlYkSr9IZlIm_29DPA/exec?aaa=text&t=1");
+                const data1 = await fetchResponse1.text();
 
-                const payload = JSON.stringify({ "_id": 555, "aa": 1222, ip: "0.0.0.0" });
+                document.getElementById("read_get").disabled = false;
+                document.getElementById("res").style.display = "block";
+                document.getElementById("root").innerHTML = data1;
+
+
+                console.log(JSON.parse(data1));
+            });
+
+
+            // POST
+            document.getElementById("write_post").addEventListener("click", async e => {
+                document.getElementById("write_post").disabled = true;
+
+                const content = document.getElementById("text_post").value;
+                const payload = JSON.stringify({ "_id": Date.now(), "text": content });
+
                 try {
                     const fetchResponse = await fetch(atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J4RUgxZEd1UzczZ0pGOElqdlZ5LUo1RmNEQVZSek93cnpJM3RTX191dkJSSERlTmZKQUdsWWtTcjlJWmxJbV8yOURQQS9leGVj"), {
                         method: 'POST',
                         body: payload
                     });
                     const data = await fetchResponse.text();
-                    // console.log(JSON.parse(data));
-                    document.getElementById("root").innerHTML = data;
-                    document.getElementById("post").disabled = false;
+                    document.getElementById("write_post").disabled = false;
+                    console.log(JSON.parse(data));
+
                     return data;
                 } catch (e) {
                     console.log(e);
                     return e;
                 }
-
-
-
-
-
             });
 
+            // document.getElementById("read_post").addEventListener("click", async e => {
+            //     document.getElementById("read_post").disabled = true;
 
-            document.getElementById("get").addEventListener("click", async e => {
+            //     const content = document.getElementById("text_get").value;
+            //     const payload = JSON.stringify({ "_id": Date.now(), "text": content });
 
-                const fetchResponse1 = await fetch("https://script.google.com/macros/s/AKfycbxEH1dGuS73gJF8IjvVy-J5FcDAVRzOwrzI3tS__uvBRHDeNfJAGlYkSr9IZlIm_29DPA/exec?aaa=text&t=1",
-                    {
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
-                        } 
-                    });
-                const data1 = await fetchResponse1.text();
-                console.log(1);
-                document.getElementById("online-user").innerHTML = data1 + "#";
+            //     try {
+            //         const fetchResponse = await fetch(atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J4RUgxZEd1UzczZ0pGOElqdlZ5LUo1RmNEQVZSek93cnpJM3RTX191dkJSSERlTmZKQUdsWWtTcjlJWmxJbV8yOURQQS9leGVj"), {
+            //             method: 'POST',
+            //             body: payload
+            //         });
+            //         const data = await fetchResponse.text();
+            //         document.getElementById("root").innerHTML = data;
+            //         document.getElementById("read_post").disabled = false;
+            //         console.log("read_post");
+            //         return data;
+            //     } catch (e) {
+            //         console.log(e);
+            //         return e;
+            //     }
+
+            // });
 
 
-            });
+            // // GET 
+            // document.getElementById("write_get").addEventListener("click", async e => {
+            //     document.getElementById("write_get").disabled = true;
+
+            //     const content = document.getElementById("text_get").value;
+            //     console.log("write_get");
+
+            // });
+
+
+
+
 
         }
 
