@@ -5,11 +5,67 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>jspdf</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <h1>TTS 2021</h1>
+
+    <h2>Пользователей онлайн: <span id="online-user">1</span></h2>
+    <div id="root"></div>
+    <button id="post" type="button">POST</button>
+    <button id="get" type="button">GET</button>
+
+    <script>
+        window.onload = () => {
+
+            document.getElementById("post").addEventListener("click", async e => {
+                document.getElementById("post").disabled = true;
+
+                // const client = await (await fetch('http://ip-api.com/json')).json(); // const payload = JSON.stringify({ "_id": 555, "aa": 1222, ip: client.query });
+
+                const payload = JSON.stringify({ "_id": 555, "aa": 1222, ip: "0.0.0.0" });
+                try {
+                    const fetchResponse = await fetch(atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J4RUgxZEd1UzczZ0pGOElqdlZ5LUo1RmNEQVZSek93cnpJM3RTX191dkJSSERlTmZKQUdsWWtTcjlJWmxJbV8yOURQQS9leGVj"), {
+                        method: 'POST',
+                        body: payload
+                    });
+                    const data = await fetchResponse.text();
+                    // console.log(JSON.parse(data));
+                    document.getElementById("root").innerHTML = data;
+                    document.getElementById("post").disabled = false;
+                    return data;
+                } catch (e) {
+                    console.log(e);
+                    return e;
+                }
+
+
+
+
+
+            });
+
+
+            document.getElementById("get").addEventListener("click", async e => {
+
+                const fetchResponse1 = await fetch("https://script.google.com/macros/s/AKfycbxEH1dGuS73gJF8IjvVy-J5FcDAVRzOwrzI3tS__uvBRHDeNfJAGlYkSr9IZlIm_29DPA/exec?aaa=text&t=1",
+                    {
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        } 
+                    });
+                const data1 = await fetchResponse1.text();
+                console.log(1);
+                document.getElementById("online-user").innerHTML = data1 + "#";
+
+
+            });
+
+        }
+
+    </script>
+
 </body>
 
 </html>
